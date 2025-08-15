@@ -1,9 +1,8 @@
 package com.attendease.attendease_api.utils;
 
+import com.attendease.attendease_api.constant.AppConstant;
 import com.attendease.attendease_api.model.Users;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,6 +19,8 @@ public class JwtUtils {
     @Value("${jwt.token.expiration.time}")
     private long expirationTime;
 
+    public record TokenValidationResult(AppConstant.TokenStatus status, Claims claims) {}
+
     private Key getSigninKey(){
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
     }
@@ -34,12 +35,26 @@ public class JwtUtils {
                 .compact();
     }
 
-    public Boolean validateToken(String token){
+    public TokenValidationResult validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(getSigninKey()).build().parseClaimsJws(token);
-            return true;
-        }catch (JwtException e){
-            return false;
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigninKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return new TokenValidationResult(AppConstant.TokenStatus.VALID, claims);
+
+        } catch (ExpiredJwtException e) {
+            return new TokenValidationResult(AppConstant.TokenStatus.EXPIRED, e.getClaims());
+        } catch (MalformedJwtException e) {
+            return new TokenValidationResult(AppConstant.TokenStatus.MALFORMED, null);
+        } catch (UnsupportedJwtException e) {
+            return new TokenValidationResult(AppConstant.TokenStatus.UNSUPPORTED, null);
+        } catch (SignatureException e) {
+            return new TokenValidationResult(AppConstant.TokenStatus.INVALID_SIGNATURE, null);
+        } catch (JwtException e) {
+            return new TokenValidationResult(AppConstant.TokenStatus.MALFORMED, null);
         }
     }
 

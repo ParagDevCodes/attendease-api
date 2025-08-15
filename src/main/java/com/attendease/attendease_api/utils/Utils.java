@@ -10,10 +10,6 @@ import java.util.UUID;
 
 public class Utils {
 
-    public static enum Role {
-        ADMIN, EMPLOYEE
-    }
-
     public static String generateUUID(){
         return UUID.randomUUID().toString().replace("-","");
     }

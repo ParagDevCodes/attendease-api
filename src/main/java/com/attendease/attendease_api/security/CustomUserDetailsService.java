@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getId())
-                .password(Utils.createHashedPassword(user.getPassword())) // must be encoded
+                .password(user.getPassword()) // already encoded
                 .authorities(user.getRole().toString())   // example: "ROLE_ADMIN"
                 .build();
     }

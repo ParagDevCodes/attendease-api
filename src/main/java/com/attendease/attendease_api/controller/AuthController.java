@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(APIRequestURL.apiBaseUrl+"auth")
 @RequiredArgsConstructor
-public class authController {
+public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(value = APIRequestURL.LoginUrl)
+    @PostMapping(value = APIRequestURL.loginUrl)
     public ResponseEntity<JsonNode> login(@RequestHeader HttpHeaders httpHeaders, @RequestBody LoginRequest loginRequest){
         if (loginRequest.checkBadRequest()){
             return new ResponseEntity<>(Utils.generateErrorResponse("Bad Request"), HttpStatus.BAD_REQUEST);

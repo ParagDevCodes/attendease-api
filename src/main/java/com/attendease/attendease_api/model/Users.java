@@ -1,5 +1,6 @@
 package com.attendease.attendease_api.model;
 
+import com.attendease.attendease_api.constant.AppConstant;
 import com.attendease.attendease_api.utils.Utils;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class Users {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Utils.Role role;
+    private AppConstant.Role role;
 
     @Builder.Default
     @Column(name = "created_at")

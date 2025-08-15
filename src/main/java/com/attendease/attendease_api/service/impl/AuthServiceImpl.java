@@ -18,6 +18,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UsersRepository usersRepository;
     private final JwtUtils jwtUtils;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -32,8 +33,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Users userDetails = userDetailsOptional.get();
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if (passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())){
             return generateJwtTokenResponse(userDetails);
