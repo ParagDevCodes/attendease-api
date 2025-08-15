@@ -9,5 +9,4 @@ public class AttendEaseApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AttendEaseApiApplication.class, args);
 	}
-
 }
